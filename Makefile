@@ -6,7 +6,7 @@ AR				=	ar
 ARFLAGS 		=	rcs
 RM				=	rm -rf
 
-SRC				=	main
+SRC				=	main utils
 SRCS 			=	$(addsuffix .c, $(SRC))
 
 OBJ_DIR			=	obj

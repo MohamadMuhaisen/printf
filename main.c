@@ -6,57 +6,84 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:32:26 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/15 16:25:48 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:40:25 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "./libft/libft.h"
 
-int	parse_arg(char specifier, va_list ap)
+void	init_format(t_format *format)
 {
-	int		count;
-	char	*str;
-	int		n;
+	format->left_justify = 0;
+	format->zero_pad = 0;
+	format->precision = -1;
+	format->alternate_form = 0;
+	format->space = 0;
+	format->plus = 0;
+	format->field_width = 0;
+}
+
+void	fill_format(const char **str, t_format *format)
+{
+	while (**str == '-' || **str == '0' || **str == '.' || **str == '#'
+		|| **str == ' ' || **str == '+')
+	{
+		if (**str == '-')
+			format->left_justify = 1;
+		else if (**str == '0')
+			format->zero_pad = 1;
+		else if (**str == '.')
+			format->precision = 1;
+		else if (**str == '#')
+			format->alternate_form = 1;
+		else if (**str == ' ')
+			format->space = 1;
+		else if (**str == '+')
+			format->plus = 1;
+		(*str)++;
+	}
+	if (**str >= '0' && **str <= '9')
+	{
+		format->field_width = ft_atoi(*str);
+		while (**str >= '0' && **str <= '9')
+			(*str)++;
+	}
+}
+
+void	left_justify(t_format *format, int *count, int limit)
+{
+	while (format->field_width > limit)
+	{
+		*count += write(1, " ", 1);
+		format->field_width--;
+	}
+}
+
+int	parse_arg(const char **str, va_list ap)
+{
+	int			count;
+	t_format	format;
 
 	count = 0;
-	if (specifier == 'c')
-		count += write(1, &(char){va_arg(ap, int)}, 1);
-	else if (specifier == 's')
-	{
-		str = va_arg(ap, char *);
-		if (str)
-			while (*str)
-				count += write(1, str++, 1);
-		else
-			count += write(1, "(null)", 6);
-	}
-	else if (specifier == 'p')
-		count += ft_putptr_fd(va_arg(ap, void *));
-	else if (specifier == 'd' || specifier == 'i')
-	{
-		n = va_arg(ap, int);
-		if (n == 0)
-		{
-			count++;
-			write(1, "0", 1);
-		}
-		else
-		{
-			if (n < 0)
-				count++;
-			ft_putnbr_fd(n, 1);
-			while (n != 0 && ++count)
-				n /= 10;
-		}
-	}
-	else if (specifier == 'u')
-		count += ft_putnbr_unsigned(va_arg(ap, unsigned int), 1);
-	else if (specifier == 'x')
-		count += ft_putnbr_hex_lower(va_arg(ap, unsigned int));
-	else if (specifier == 'X')
-		count += ft_putnbr_hex_upper(va_arg(ap, unsigned int));
-	else if (specifier == '%')
+	init_format(&format);
+	(*str)++;
+	fill_format(str, &format);
+	if (**str == 'c')
+		count += parse_c(ap, &format);
+	else if (**str == 's')
+		count += parse_s(ap, &format);
+	else if (**str == 'p')
+		count += ft_putptr_fd(va_arg(ap, void *), &format, 0);
+	else if (**str == 'd' || **str == 'i')
+		count += parse_int(ap, &format);
+	else if (**str == 'u')
+		count += ft_putnbr_unsigned(va_arg(ap, unsigned int), 1, &format);
+	else if (**str == 'x')
+		count += ft_putnbr_hex_lower(va_arg(ap, unsigned int), &format);
+	else if (**str == 'X')
+		count += ft_putnbr_hex_upper(va_arg(ap, unsigned int), &format);
+	else if (**str == '%')
 		count += write(1, "%", 1);
 	return (count);
 }
@@ -71,7 +98,7 @@ int	ft_printf(const char *str, ...)
 	while (*str)
 	{
 		if (*str == '%')
-			count += parse_arg(*(++str), ap);
+			count += parse_arg(&str, ap);
 		else
 			count += write(1, str, 1);
 		str++;
@@ -85,9 +112,11 @@ int	ft_printf(const char *str, ...)
 // 	int printed_chars;
 // 	int *ptr = NULL;
 
-// 	printed_chars = ft_printf("Hello %c test test %c name is %s bla bla\n", 'X', 'Z', "Mohamad");
-// 	printf("Printed characters: %d\n", printed_chars);
-// 	printed_chars = ft_printf("Pointer address: %p\n", ptr);
+// 	printed_chars = ft_printf("[%-4p]\n", (void *)17);
+// 	printed_chars = printf("[%-4p]\n", (void *)17);
+// 	printf("D%dD\n", printed_chars);
+// }
+
 // 	printf("Printed characters: %d\n", printed_chars);
 // 	printed_chars = ft_printf("Pointer address: %p\n", NULL);
 // 	printf("Printed characters: %d\n", printed_chars);

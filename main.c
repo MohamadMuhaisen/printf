@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:32:26 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/18 17:40:25 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/18 20:34:33 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ int	ft_printf(const char *str, ...)
 // 	int printed_chars;
 // 	int *ptr = NULL;
 
-// 	printed_chars = ft_printf("[%-4p]\n", (void *)17);
-// 	printed_chars = printf("[%-4p]\n", (void *)17);
+// 	printed_chars = ft_printf("[%-12d]\n", LONG_MIN);
+// 	printed_chars = printf("[%-12d]\n", LONG_MIN);
 // 	printf("D%dD\n", printed_chars);
 // }
 

@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:37:38 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/18 17:43:16 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/18 20:37:32 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,55 @@ int	parse_c(va_list ap, t_format *format)
 	return (count);
 }
 
+void	add_zeros(t_format *format, int *n, int *count)
+{
+	int	copy;
+	int	len;
+
+	len = 0;
+	copy = *n;
+	while (copy)
+	{
+		copy /= 10;
+		len++;
+	}
+	if (*n <= 0)
+	{
+		format->field_width--;
+		if (*n < 0 && *n != -2147483648)
+		{
+			*count += write(1, "-", 1);
+			*n *= -1;
+		}
+	}
+	format->field_width -= len;
+	while (format->field_width > 0)
+	{
+		*count += write(1, "0", 1);
+		format->field_width--;
+	}
+}
+
+void	add_zeros_unsigned(t_format *format, unsigned int *n, int *count)
+{
+	unsigned int	copy;
+	int				len;
+
+	len = 0;
+	copy = *n;
+	while (copy)
+	{
+		copy /= 10;
+		len++;
+	}
+	format->field_width -= len;
+	while (format->field_width > 0)
+	{
+		*count += write(1, "0", 1);
+		format->field_width--;
+	}
+}
+
 int	parse_int(va_list ap, t_format *format)
 {
 	int	count;
@@ -34,10 +83,13 @@ int	parse_int(va_list ap, t_format *format)
 	n = va_arg(ap, int);
 	if (format->plus == 1 && n >= 0)
 		count += write(1, "+", 1);
+	// if (format->zero_pad)
+	// 	add_zeros(format, &n, &count);
 	if (n == 0)
 	{
 		count++;
 		write(1, "0", 1);
+		// format->field_width--;
 	}
 	else
 	{

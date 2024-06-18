@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:32:47 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/18 17:37:12 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/18 19:50:19 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,7 @@ void	fill_format(const char **str, t_format *format);
 int		parse_c(va_list ap, t_format *format);
 int		parse_arg(const char **str, va_list ap);
 int		ft_putnbr_hex_recursive(unsigned long nbr, char *base);
+void	add_zeros(t_format *format, int *n, int *count);
+void	add_zeros_unsigned(t_format *format, unsigned int *n, int *count);
 
 #endif

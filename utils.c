@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
+/*   By: mmuhaise <mmuhaise@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 16:19:32 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/18 20:41:58 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/19 21:55:47 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ int	ft_putnbr_hex(unsigned long nbr, char *base, t_format *format, int l)
 {
 	int	count;
 
-	count = ft_putnbr_hex_recursive(nbr, base);
+	count = 0;
+	if (format->zero_pad && format->field_width > 0)
+		add_zeros_unsigned(format, &nbr, &count, 16);
+	count += ft_putnbr_hex_recursive(nbr, base);
 	if (l)
 		left_justify(format, &count, count);
 	return (count);
@@ -55,11 +58,14 @@ int	ft_putptr_fd(void *ptr, t_format *format, int l)
 	return (count);
 }
 
-int	ft_putnbr_unsigned(unsigned int n, int fd, t_format *format)
+int	ft_putnbr_unsigned(unsigned long int n, int fd, t_format *format)
 {
 	int	count;
 
-	count = ft_putnbr_unsigned_recursive(n, fd);
+	count = 0;
+	if (format->zero_pad)
+		add_zeros_unsigned(format, &n, &count, 10);
+	count += ft_putnbr_unsigned_recursive(n, fd);
 	format->field_width -= count;
 	left_justify(format, &count, 0);
 	return (count);

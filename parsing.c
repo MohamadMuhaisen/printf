@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
+/*   By: mmuhaise <mmuhaise@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:37:38 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/18 20:37:32 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/19 23:52:13 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	add_zeros(t_format *format, int *n, int *count)
 	}
 }
 
-void	add_zeros_unsigned(t_format *format, unsigned int *n, int *count)
+void	add_zeros_unsigned(t_format *format, unsigned long int *n, int *count,
+				int base)
 {
 	unsigned int	copy;
 	int				len;
@@ -63,9 +64,11 @@ void	add_zeros_unsigned(t_format *format, unsigned int *n, int *count)
 	copy = *n;
 	while (copy)
 	{
-		copy /= 10;
+		copy /= base;
 		len++;
 	}
+	if (*n == 0)
+		format->field_width--;
 	format->field_width -= len;
 	while (format->field_width > 0)
 	{
@@ -83,13 +86,12 @@ int	parse_int(va_list ap, t_format *format)
 	n = va_arg(ap, int);
 	if (format->plus == 1 && n >= 0)
 		count += write(1, "+", 1);
-	// if (format->zero_pad)
-	// 	add_zeros(format, &n, &count);
+	if (format->zero_pad)
+		add_zeros(format, &n, &count);
 	if (n == 0)
 	{
 		count++;
 		write(1, "0", 1);
-		// format->field_width--;
 	}
 	else
 	{
@@ -131,14 +133,4 @@ int	parse_s(va_list ap, t_format *format)
 		while (padding-- > 0)
 			count += write(1, " ", 1);
 	return (count);
-}
-
-int	ft_putnbr_hex_lower(unsigned int nbr, t_format *format)
-{
-	return (ft_putnbr_hex(nbr, "0123456789abcdef", format, 1));
-}
-
-int	ft_putnbr_hex_upper(unsigned int nbr, t_format *format)
-{
-	return (ft_putnbr_hex(nbr, "0123456789ABCDEF", format, 1));
 }

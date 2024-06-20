@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmuhaise <mmuhaise@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 16:19:32 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/19 21:55:47 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:30:39 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ int	ft_putnbr_hex(unsigned long nbr, char *base, t_format *format, int l)
 	count = 0;
 	if (format->zero_pad && format->field_width > 0)
 		add_zeros_unsigned(format, &nbr, &count, 16);
+	if (format->alternate_form && nbr != 0)
+	{
+		if (base[10] == 'a')
+			count += write(1, "0x", 2);
+		else
+			count += write(1, "0X", 2);
+	}
 	count += ft_putnbr_hex_recursive(nbr, base);
 	if (l)
 		left_justify(format, &count, count);

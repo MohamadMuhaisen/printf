@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmuhaise <mmuhaise@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 12:32:26 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/19 21:56:48 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:37:47 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ int	ft_printf(const char *str, ...)
 // 	int printed_chars;
 // 	int *ptr = NULL;
 
-// 	printed_chars = ft_printf("[%03x]\n", 15);
-// 	printed_chars = printf("[%03x]\n", 15);
+// 	printed_chars = ft_printf("[% d]\n", -1);
+// 	printf("[% d]\n", -1);
 // 	printf("D%dD\n", printed_chars);
 // }
 

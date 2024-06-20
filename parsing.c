@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmuhaise <mmuhaise@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:37:38 by mmuhaise          #+#    #+#             */
-/*   Updated: 2024/06/19 23:52:13 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:37:37 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int	parse_int(va_list ap, t_format *format)
 	n = va_arg(ap, int);
 	if (format->plus == 1 && n >= 0)
 		count += write(1, "+", 1);
+	if (format->space && n >= 0)
+		count += write(1, " ", 1);
 	if (format->zero_pad)
 		add_zeros(format, &n, &count);
 	if (n == 0)
